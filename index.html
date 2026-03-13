@@ -8,36 +8,29 @@
     <style>
         .audio-controls {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; text-align: center; width: 100%;
+            z-index: 9999; text-align: center; width: 100%;
         }
         .btn {
-            padding: 15px 30px; border-radius: 50px; border: none;
-            background-color: #FF5722; color: white; font-size: 18px;
-            font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 20px 40px; border-radius: 50px; border: none;
+            background-color: #FF5722; color: white; font-size: 20px;
+            font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body style="margin:0; overflow:hidden;">
 
     <div class="audio-controls">
-        <button class="btn" onclick="togglePlay()">🎶 ભજન સાંભળો</button>
-        <audio id="bapuBhajan" src="https://archive.org/download/VaishnavJanTo_201811/Vaishnav%20Jan%20To.mp3" crossorigin="anonymous"></audio>
+        <button id="playBtn" class="btn" onclick="playBhajan()">🎶 ભજન શરૂ કરો</button>
     </div>
     
     <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-        
         <a-assets>
             <a-asset-item id="gandhi-model" src="https://cdn.glitch.global/331a9829-17d4-42f5-93df-5c5f850e029c/Gandhi_Bust.glb"></a-asset-item>
+            <audio id="bapuBhajan" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" crossorigin="anonymous"></audio>
         </a-assets>
 
         <a-marker preset="hiro">
-            <a-entity 
-                gltf-model="#gandhi-model" 
-                scale="0.6 0.6 0.6" 
-                position="0 0.2 0" 
-                rotation="-90 0 0">
-            </a-entity>
-
+            <a-entity gltf-model="#gandhi-model" scale="0.6 0.6 0.6" position="0 0.2 0" rotation="-90 0 0"></a-entity>
             <a-text value="Vaishnav Jan To..." color="#E91E63" position="0 1.2 0" align="center" rotation="-90 0 0" width="5"></a-text>
         </a-marker>
 
@@ -45,20 +38,28 @@
     </a-scene>
 
     <script>
-        function togglePlay() {
+        function playBhajan() {
             var audio = document.getElementById("bapuBhajan");
-            var btn = document.querySelector(".btn");
+            var btn = document.getElementById("playBtn");
+            
+            // જો લિંક કામ ન કરે તો આ બેકઅપ લિંક (વૈષ્ણવ જન તો) વાપરો
+            if(audio.src.includes("SoundHelix")) {
+                audio.src = "https://ia800605.us.archive.org/32/items/VaishnavJanTo_201811/Vaishnav%20Jan%20To.mp3";
+            }
+
             if (audio.paused) {
-                audio.play();
-                btn.innerHTML = "⏸️ ભજન બંધ કરો";
-                btn.style.backgroundColor = "#4CAF50";
+                audio.play().then(() => {
+                    btn.innerHTML = "⏸️ ભજન બંધ કરો";
+                    btn.style.backgroundColor = "#4CAF50";
+                }).catch(error => {
+                    alert("મહેરબાની કરીને ફરી પ્રયત્ન કરો અથવા બ્રાઉઝર સેટિંગ તપાસો.");
+                });
             } else {
                 audio.pause();
-                btn.innerHTML = "🎶 ભજન સાંભળો";
+                btn.innerHTML = "🎶 ભજન શરૂ કરો";
                 btn.style.backgroundColor = "#FF5722";
             }
         }
     </script>
-
 </body>
 </html>
