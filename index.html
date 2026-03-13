@@ -1,32 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="gu">
 <head>
-<meta charset="utf-8">
-<title>Gandhi AR</title>
-<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-<style>
-body { margin:0; overflow:hidden; }
-</style>
+    <meta charset="utf-8">
+    <title>Bapu AR Audio - Hiren Sharma</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    <style>
+        .audio-controls {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; text-align: center; width: 100%;
+        }
+        .btn {
+            padding: 15px 30px; border-radius: 50px; border: none;
+            background-color: #FF5722; color: white; font-size: 18px;
+            font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+    </style>
 </head>
-<body>
+<body style="margin:0; overflow:hidden;">
 
-<a-scene embedded arjs="trackingMethod: best; sourceType: webcam;">
+    <div class="audio-controls">
+        <button class="btn" onclick="togglePlay()">🎶 ભજન સાંભળો</button>
+        <audio id="bapuBhajan" src="https://archive.org/download/VaishnavJanTo_201811/Vaishnav%20Jan%20To.mp3" crossorigin="anonymous"></audio>
+    </div>
+    
+    <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+        
+        <a-assets>
+            <a-asset-item id="gandhi-model" src="https://cdn.glitch.global/331a9829-17d4-42f5-93df-5c5f850e029c/Gandhi_Bust.glb"></a-asset-item>
+        </a-assets>
 
-<a-marker preset="hiro">
+        <a-marker preset="hiro">
+            <a-entity 
+                gltf-model="#gandhi-model" 
+                scale="0.6 0.6 0.6" 
+                position="0 0.2 0" 
+                rotation="-90 0 0">
+            </a-entity>
 
-<a-plane src="gandhi.jpg"
-position="0 0.5 0"
-rotation="-90 0 0"
-width="1"
-height="1.2">
-</a-plane>
+            <a-text value="Vaishnav Jan To..." color="#E91E63" position="0 1.2 0" align="center" rotation="-90 0 0" width="5"></a-text>
+        </a-marker>
 
-</a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
 
-<a-entity camera></a-entity>
-
-</a-scene>
+    <script>
+        function togglePlay() {
+            var audio = document.getElementById("bapuBhajan");
+            var btn = document.querySelector(".btn");
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "⏸️ ભજન બંધ કરો";
+                btn.style.backgroundColor = "#4CAF50";
+            } else {
+                audio.pause();
+                btn.innerHTML = "🎶 ભજન સાંભળો";
+                btn.style.backgroundColor = "#FF5722";
+            }
+        }
+    </script>
 
 </body>
 </html>
